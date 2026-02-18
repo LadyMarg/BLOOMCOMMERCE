@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from rest_framework import status, serializers
+from rest_framework import status,  serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -38,9 +38,9 @@ class CategoryListCreateAPIView(APIView):
  #retrieve, update and delete category # get, put and delete method
 class CategoryRetrieveUpdateDeleteAPIView(APIView):
 #get method to retrieve category by id
-    def get(self, request, pk):
+    def get(self, request, id):
         try:
-            category = Category.objects.get(pk=pk)
+            category = Category.objects.get(id=id)
             serializer = CategorySerializer(category)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Category.DoesNotExist:
@@ -49,9 +49,9 @@ class CategoryRetrieveUpdateDeleteAPIView(APIView):
             return Response({"error": "An error occurred while retrieving the category"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 #update category
-    def put(self, request, pk):
+    def put(self, request, id):
         try:
-            category = Category.objects.get(pk=pk)
+            category = Category.objects.get(id=id)
             serializer = CategorySerializer(category, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -64,9 +64,9 @@ class CategoryRetrieveUpdateDeleteAPIView(APIView):
 
 
 #delete category    
-    def delete(self, request, pk):
+    def delete(self, request, id):
         try:
-            category = Category.objects.get(pk=pk)
+            category = Category.objects.get(id=id)
             category.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Category.DoesNotExist:
