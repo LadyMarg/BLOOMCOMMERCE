@@ -9,49 +9,64 @@ from django.db import models
 
 class Category(models.Model):
     title = models.CharField(max_length=100) #title of the product example: shirt, trouser, shoe
-    image = models.ImageField(upload_to="category_images/", null = True, blank = True, blank=True) #images of the product, null and blank means it not required
+    image = models.ImageField(upload_to="category_images/", null = True, blank=True) #images of the product, null and blank means it not required
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+SIZE_CHOICES = [
+    ('S', 'Small'),
+    ('M', 'Medium'),
+    ('L', 'Large'),
+    ('XL', 'Extra Large'),
+]
+
+class Product(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    review = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    in_stock = models.BooleanField(default=True)
+    description = models.TextField()
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES)
+    colour = models.CharField(max_length=50)
+    main_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")  
+    product_image1 = models.ImageField(upload_to="product_images/", null=True, blank=True)
+    product_image2 = models.ImageField(upload_to="product_images/", null=True, blank=True)
+    product_image3 = models.ImageField(upload_to="product_images/", null=True, blank=True)
+    product_image4 = models.ImageField(upload_to="product_images/", null=True, blank=True)
+    specification = models.TextField(null=True, blank=True)
+    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    is_available = models.BooleanField(default=True)
+    material = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
     
 
-class Product(models.Model):
-    title = models.CharField(max_length=200)
-    review = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-    in_stock = models.BooleanField(default=True)
-    description = models.TextField()
-    size = models.CharField(max_length=10)
-    colour = models.CharField(max_length=50)
-    product_image = models.ImageField(upload_to="product_images/", null=True, blank=True)
-    specification = models.TextField()
-    material = models.CharField(max_length=100)
+# class Cart(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(default=1)
 
-    def __str__(self):
-        return self.title
+#     def __str__(self):
+#         return f"{self.quantity} of {self.product.title}"
     
+# class CartProduct(models.Model):
+#     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(default=1)       
 
-class Cart(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} of {self.product.title}"
-    
-class CartProduct(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)       
-
-    def __str__(self):
-         return f"{self.quantity} of {self.product.title} in cart {self.cart.id}"
+#     def __str__(self):
+#          return f"{self.quantity} of {self.product.title} in cart {self.cart.id}"
 
 
-class Order(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)      
+# class Order(models.Model):
+#     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+#     total_price = models.DecimalField(max_digits=10, decimal_places=2)      
 
-    def __str__(self):
-        return f"Order for cart {self.cart.id} with total price {self.total_price}"    
+#     def __str__(self):
+#         return f"Order for cart {self.cart.id} with total price {self.total_price}"    

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Categories</title>
+</head>
+<body>
+    <h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li>
+                {{ category.title }}
+                {% if category.image %}
+                    <img src="{{ category.image.url }}" width="100" alt="{{ category.title }}">
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No categories found</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

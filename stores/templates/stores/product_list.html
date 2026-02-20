@@ -1,0 +1,16 @@
+<h1>Products</h1>
+<ul>
+  {% for product in products %}
+    <li>
+      <strong>{{ product.title }}</strong> - ${{ product.price }}<br>
+      Category: {{ product.main_category.title }}<br>
+      Size: {{ product.size }}<br>
+      Colour: {{ product.colour }}<br>
+      {% if product.product_image1 %}
+        <img src="{{ product.product_image1.url }}" alt="{{ product.title }}" width="100">
+      {% endif %}
+    </li>
+  {% empty %}
+    <li>No products found</li>
+  {% endfor %}
+</ul>
